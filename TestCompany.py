@@ -23,6 +23,12 @@ class TestCompany(unittest.TestCase):
                              'gjob2': [2, 'type 2', '2022-10-11'],
                              'gjob3': [1, 'type 3', '2022-10-12'],
                              'gjob4': [5, 'type 1', '2022-10-12']})
+        
+        
+        self.j1.apply(self.c1, 'gjob1')
+        self.j2.apply(self.c1, 'gjob3')
+        self.j3.apply(self.c1, 'gjob2')
+        self.j4.apply(self.c1, 'gjob1')
     
        
         
@@ -33,30 +39,22 @@ class TestCompany(unittest.TestCase):
     
     def test_get_candidate_details(self):
         
-        self.j1.apply(self.c1, 'gjob1')
-        self.j2.apply(self.c1, 'gjob3')
-        self.j3.apply(self.c1, 'gjob3')
-        self.j4.apply(self.c1, 'gjob1')
         
-        self.assertEqual(self.c1.get_candidate_details(0),('j1', 1, 1, 'python'))
-        self.assertEqual(self.c1.get_candidate_details(1),('j2', 2, 0, 'R'))
-        self.assertEqual(self.c1.get_candidate_details(2),('j3', 3, 3, 'SQL'))
-        self.assertEqual(self.c1.get_candidate_details(3),('j4', 4, 4, 'stats'))
-        
-        
+        l = self.c1.application_list
+        self.assertEqual((l[0].account, l[0].password, l[0].job_experience, l[0].speciality), ('j1', 1, 1, 'python'))
+        self.assertEqual((l[1].account, l[1].password, l[1].job_experience, l[1].speciality), ('j2', 2, 0, 'R'))
+        self.assertEqual((l[2].account, l[2].password, l[2].job_experience, l[2].speciality), ('j3', 3, 3, 'SQL'))
+        self.assertEqual((l[2].account, l[3].password, l[3].job_experience, l[3].speciality), ('j3', 4, 4, 'stats'))
+    
     def test_get_len_ap(self):
         
-        self.assertIsInstance(self.c1.get_len_ap,int)
-        self.assertEqual(self.c1.get_len_ap,4)
+        self.assertIsInstance(self.c1.get_len_ap(), int)
+        self.assertEqual(self.c1.get_len_ap(), 4)
         
-        del self.c1.application_list[4]
+        self.c1.application_list.pop(0)
         
-        self.assertNotEqual(self.c1.get_len_ap,4)
-        self.assertEqual(self.c1.get_len_ap,3)
+        self.assertNotEqual(self.c1.get_len_ap(), 4)
+        self.assertEqual(self.c1.get_len_ap(), 3)
+        
         
 unittest.main(argv=[''], verbosity=2, exit=False)
-        
-        
-        
-        
-        
